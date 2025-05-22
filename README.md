@@ -76,39 +76,77 @@ The datasets include metadata such as feature types, presence of missing values,
 
 ## References
 
+
+## References
+
 [1] Torgo, L. (2016). Data mining with R: Learning with case studies (2nd ed.). Chapman & Hall/CRC. http://ltorgo.github.io/DMwR2
+
 [2] Nash, W., Sellers, T., Talbot, S., Cawthorn, A., & Ford, W. (1994). Abalone. UCI Machine Learning Repository. https://doi.org/10.24432/C55C7W
+
 [3] Moniz, N., Ribeiro, R. P., & Margarido, M. (2023). accel: Acceleration dataset [Dataset in the IRon R package, version 0.1.4]. https://CRAN.R-project.org/package=IRon
+
 [4] Alcalá-Fdez, J., Fernández, A., Luengo, J., Derrac, J., García, S., Sánchez, L., & Herrera, F. (2011). KEEL data-mining software tool: Data set repository, integration of algorithms and experimental analysis framework. Journal of Multiple-Valued Logic and Soft Computing, 17(2–3), 255–287.
+
 [5] Brooks, T., Pope, D., & Marcolini, M. (1989). Airfoil self-noise [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C5VW2C
+
 [6] Candanedo, L. (2017). Appliances energy prediction [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C5VC8G
+
 [7] Schlimmer, J. (1985). Automobile [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C5B01C
+
 [8] Camacho, L., & Bação, F. (2024). WSMOTER: A novel approach for imbalanced regression. Applied Intelligence, 54, 1–11. https://doi.org/10.1007/s10489-024-05608-6
+
 [9] Rasmussen, C. E., Neal, R. M., Hinton, G. E., et al. (1996). DELVE: Data for evaluating learning in valid experiments[Software and dataset repository]. University of Toronto. https://www.cs.toronto.edu/~delve/
+
 [10] Journal of Statistics Education. (1992). Pay for play: Are baseball salaries based on performance? [Dataset]. Dataset available from the Journal of Statistics Education. https://jse.amstat.org/datasets/baseball.dat.txt
+
 [11] Carnegie Mellon University. (2016). StatLib: A data and software archive [Online dataset repository]. https://lib.stat.cmu.edu
+
 [12] OpenML contributors. (2025). OpenML dataset 1051 [Dataset]. OpenML: An open platform for machine learning. https://www.openml.org/d/1051
+
 [13] Yeh, I.-C. (1998). Concrete compressive strength [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C5PK67
+
 [14] Fortuna, L., Graziani, S., Rizzo, A., & Xibilia, M. G. (2007). Soft sensors for monitoring and control of industrial processes. In Advances in Industrial Control. Springer London. https://doi.org/10.1007/978-1-84628-480-9
+
 [15] Torgo, L. (2019). Regression data sets [Online dataset repository]. LIACC / University of Porto. https://www.dcc.fc.up.pt/~ltorgo/Regression/DataSets.html
+
 [16] Cortez, P., & Morais, A. (2007). Forest fires [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C5D88D
+
 [17] University of Toronto, DELVE Project. (2003). DELVE: Data for evaluating learning in valid experiments [Online dataset repository]. https://www.cs.toronto.edu/~delve/
+
 [18] Zhou, F., Claire, Q., & King, R. D. (2014). Geographical origin of music [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C5VK5D
+
 [19] Necrothapa, S. (2020). Ames housing dataset [Dataset]. Kaggle. https://www.kaggle.com/datasets/shashanknecrothapa/ames-housing-dataset
+
 [20] Schirmer, C. (2020). Boston housing [Dataset]. Kaggle. https://www.kaggle.com/datasets/schirmerchad/bostonhoustingmlnd
+
 [21] Elkan, C. (2001). Magical thinking in data mining: Lessons from CoIL Challenge 2000. In Proceedings of the seventh ACM SIGKDD international conference on Knowledge discovery and data mining (pp. 426–431). ACM. https://doi.org/10.1145/502512.502576
+
 [22] Director's Challenge Consortium for the Molecular Classification of Lung Adenocarcinoma, Shedden, K., Taylor, J. M., Enkemann, S. A., Tsao, M. S., Yeatman, T. J., Gerald, W. L., Eschrich, S., Jurisica, I., Giordano, T. J., Misek, D. E., Chang, A. C., Zhu, C. Q., Strumpf, D., Hanash, S., & Shepherd, F. A. (2008). Shedden_2008: Gene expression–based survival prediction in lung adenocarcinoma [Dataset]. Lung Cancer Explorer, UT Southwestern. https://lce.biohpc.swmed.edu/lungcancer/datasetsearch.php?datasetid=1
+
 [23] Branco, P., Torgo, L., & Ribeiro, R. P. (2025). Imbalanced regression data sets [Online dataset repository]. University of Porto. https://paobranco.github.io/Imbalanced-Regression-DataSets/
+
 [24] Meta-data. (1994). Meta-data [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C5X31P
+
 [25] Board of Governors of the Federal Reserve System. (2025). H.15 selected interest rates [Statistical release and dataset repository]. https://www.federalreserve.gov/releases/h15/
+
 [26] OpenML contributors. (2025). OpenML dataset 409 [Dataset]. OpenML platform. https://www.openml.org/d/409
+
 [27] Coleman, D. (1986). pollen: Geometric features of pollen grains [Dataset]. StatLib Archive, Carnegie Mellon University. https://lib.stat.cmu.edu/data-expo/pollen.data
+
 [28] Brien, C. J., & Payne, R. W. (1999). Tiers, structure formulae and the analysis of complicated experiments. Journal of the Royal Statistical Society: Series D (The Statistician), 48(1), 41–52.
+
 [29] OpenML contributors. (n.d.). space_ga [Dataset]. OpenML. https://www.openml.org/d/507
+
 [30] Carnegie Mellon University, Department of Statistics. (2016). StatLib: A data and software archive [Online dataset repository]. https://lib.stat.cmu.edu/datasets/
+
 [31] Tibshirani, R. J. (2015). strike: Annual strikes data for OECD countries (1951–1985) [Dataset]. Dataset used in course “Statistical Computing,” Carnegie Mellon University. http://www.stat.cmu.edu/~ryantibs/statcomp-F15/homework/strike.txt
+
 [32] OpenML contributors. (2025). sulfur [Dataset]. OpenML. https://www.openml.org/d/23515
+
 [33] Hamidieh, K. (2018). Superconductivity data [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C53P47
+
 [34] King, R. D., Hurst, J. D., & Sternberg, M. J. E. (1994). A comparison of artificial intelligence methods for modelling QSARs. Applied Artificial Intelligence, 9, 213–234. / Hirst, J. D., King, R. D., & Sternberg, M. J. E. (1994). Quantitative structure–activity relationships by neural networks and inductive logic programming: II. The inhibition of dihydrofolate reductase by triazines. Journal of Computer-Aided Molecular Design, 8(4), 421–432. https://doi.org/10.1007/BF00125376
+
 [35] Cortez, P., Cerdeira, A., Almeida, F., Matos, T., & Reis, J. (2009). Wine Quality [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C56S3T.
+
 [36] Gerritsma, J., Onnink, R., & Versluis, A. (1981). Yacht Hydrodynamics [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C5XG7R.
