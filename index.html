@@ -1,14 +1,70 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Imbalanced Regression Dataset Repository</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css"/>
-    <style>
+<script crossorigin="anonymous" src="https://kit.fontawesome.com/a076d05399.js"></script>
+<script>
+        // Dark mode auto-detection
+        window.addEventListener('DOMContentLoaded', () => {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.body.classList.add('dark-mode');
+                const tables = document.querySelectorAll('table');
+                tables.forEach(table => table.classList.add('table-dark'));
+            }
+        });
+    </script>
+<meta charset="utf-8"/>
+<title>Imbalanced Regression Dataset Repository</title>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+<link href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" rel="stylesheet" type="text/css">
+<link href="https://cdn.datatables.net/fixedheader/3.4.0/css/fixedHeader.bootstrap5.min.css" rel="stylesheet" type="text/css"/>
+<style>
+        @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;600&display=swap');
+
         body {
-            background-color: #fdf5d7; /* pastel mustard */
+            font-family: 'Rubik', sans-serif;
+        }
+
+        h1, h3 {
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .dark-toggle {
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .dark-toggle:hover {
+            transform: scale(1.05);
+            background-color: #9AB5C1;
+        }
+
+        button, .paginate_button {
+            background-color: #C1867B !important;
+            color: white !important;
+            border: none !important;
+            border-radius: 4px !important;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        button:hover, .paginate_button:hover {
+            background-color: #A44F4F !important;
+            transform: scale(1.05);
+        }
+
+        tbody tr {
+            transition: background-color 0.3s ease;
+        }
+
+        tbody tr:hover {
+            background-color: #e0e0e0 !important;
+        }
+    
+        tbody tr:nth-child(even) { background-color: #F8F8F8; }
+        tbody tr:nth-child(odd) { background-color: #F3F5F7; }
+        body {
+            background-color: #EBEDC8;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         .container {
@@ -21,990 +77,187 @@
             font-size: 0.9rem;
         }
         thead th {
-            position: sticky;
-            top: 0;
-            background-color: #343a40;
-            color: white;
-            z-index: 2;
             text-align: center !important;
         }
         td {
             text-align: center !important;
             vertical-align: middle !important;
+            word-wrap: break-word;
+            white-space: normal;
+        }
+        .desc-cell {
+            max-width: 200px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            cursor: pointer;
+        }
+        .desc-cell.expanded {
+            white-space: normal;
+            max-width: none;
+        }
+        .dataTables_filter {
+            position: fixed;
+            top: 20px;
+            right: 30px;
+            z-index: 999;
+            background: #EBEDC8;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 0 6px rgba(0,0,0,0.1); background-color: #9AB5C1;
+        }
+        .dataTables_paginate {
+            position: fixed;
+            bottom: 20px;
+            right: 30px;
+            z-index: 999;
+            background: #EBEDC8;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 0 6px rgba(0,0,0,0.1); background-color: #9AB5C1;
+        }
+        .dark-toggle {
+            position: fixed;
+            top: 20px;
+            left: 30px;
+            z-index: 1000;
+            background: #EBEDC8;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 14px;
+            box-shadow: 0 0 6px rgba(0,0,0,0.1); background-color: #9AB5C1;
+            cursor: pointer;
+        }
+        body.dark-mode {
+            background-color: #1e1e1e;
+            color: #ffffff;
+        }
+        body.dark-mode .container,
+        body.dark-mode .dataTables_filter,
+        body.dark-mode .dataTables_paginate {
+            background-color: #1e1e1e;
+            color: #ffffff;
+        }
+        body.dark-mode table {
+            color: #ffffff;
         }
     </style>
-</head>
+<script>
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const tables = document.querySelectorAll('table');
+            tables.forEach(table => table.classList.toggle('table-dark'));
+        }
+    </script>
+</link></head>
 <body>
-    <div class="container my-5">
-        <h1 class="mb-4">Imbalanced Regression Dataset Repository</h1>
-        <h5 class="text-muted mb-4">A curated collection of datasets for extreme value-aware regression tasks</h5>
-        <p>This page provides access to datasets with metadata on features, target imbalance, extreme values, and missing data characteristics. Ideal for benchmarking regression models under imbalanced conditions.</p>
-        <div class="table-responsive">
-            <table id="datasetTable" class="table table-striped table-hover table-bordered align-middle" style="width:100%">
-                <table class="dataframe dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th>Dataset</th>
-      <th>Description</th>
-      <th>Features</th>
-      <th>Nominal Features</th>
-      <th>Numeric Features</th>
-      <th>Instances</th>
-      <th>Missing Values</th>
-      <th>Type of Extreme</th>
-      <th>Relevance Threshold</th>
-      <th>#
-Rare</th>
-      <th>% Rare</th>
-      <th>Target Variable</th>
-      <th>Target Variable Index Position</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>a1</td>
-      <td>The data points are taken on an annual basis from various streams / rivers in Europe, compiling features aimed at predicting the concentrations of seven algae species.</td>
-      <td>11</td>
-      <td>3</td>
-      <td>8</td>
-      <td>198</td>
-      <td>No</td>
-      <td>Both</td>
-      <td>0.8</td>
-      <td>0</td>
-      <td>0.00%</td>
-      <td>a1</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>a2</td>
-      <td>The data points are taken on an annual basis from various streams / rivers in Europe, compiling features aimed at predicting the concentrations of seven algae species.</td>
-      <td>11</td>
-      <td>3</td>
-      <td>8</td>
-      <td>198</td>
-      <td>No</td>
-      <td>Both</td>
-      <td>0.8</td>
-      <td>0</td>
-      <td>0.00%</td>
-      <td>a2</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>a3</td>
-      <td>The data points are taken on an annual basis from various streams / rivers in Europe, compiling features aimed at predicting the concentrations of seven algae species.</td>
-      <td>11</td>
-      <td>3</td>
-      <td>8</td>
-      <td>198</td>
-      <td>No</td>
-      <td>Both</td>
-      <td>0.8</td>
-      <td>0</td>
-      <td>0.00%</td>
-      <td>a3</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>a4</td>
-      <td>The data points are taken on an annual basis from various streams / rivers in Europe, compiling features aimed at predicting the concentrations of seven algae species.</td>
-      <td>11</td>
-      <td>3</td>
-      <td>8</td>
-      <td>198</td>
-      <td>No</td>
-      <td>Both</td>
-      <td>0.8</td>
-      <td>0</td>
-      <td>0.00%</td>
-      <td>a4</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>a6</td>
-      <td>The data points are taken on an annual basis from variousstreams / rivers in Europe, compiling features aimed at predicting the concentrations of seven algae species.</td>
-      <td>11</td>
-      <td>3</td>
-      <td>8</td>
-      <td>198</td>
-      <td>No</td>
-      <td>Both</td>
-      <td>0.8</td>
-      <td>0</td>
-      <td>0.00%</td>
-      <td>a6</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>a7</td>
-      <td>The data points are taken on an annual basis from various streams / rivers in Europe, compiling features aimed at predicting the concentrations of seven algae species.</td>
-      <td>11</td>
-      <td>3</td>
-      <td>8</td>
-      <td>198</td>
-      <td>No</td>
-      <td>High</td>
-      <td>0.8</td>
-      <td>14</td>
-      <td>7.07%</td>
-      <td>a7</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>abalone</td>
-      <td>Predict the age of abalone from physical measurements.</td>
-      <td>8</td>
-      <td>1</td>
-      <td>7</td>
-      <td>4177</td>
-      <td>No</td>
-      <td>Both</td>
-      <td>0.8</td>
-      <td>1033</td>
-      <td>24.73%</td>
-      <td>Rings</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>acceleration</td>
-      <td>Dataset with acceleration statistics.</td>
-      <td>14</td>
-      <td>3</td>
-      <td>11</td>
-      <td>1732</td>
-      <td>No</td>
-      <td>Both</td>
-      <td>0.8</td>
-      <td>158</td>
-      <td>9.12%</td>
-      <td>acceleration</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>ailerons</td>
-      <td>The attributes describe the status of the aeroplane, while the goal is to predict the control action on the ailerons of the aircraft.</td>
-      <td>40</td>
-      <td>0</td>
-      <td>40</td>
-      <td>13515</td>
-      <td>No</td>
-      <td>Both</td>
-      <td>0.8</td>
-      <td>1622</td>
-      <td>11.80%</td>
-      <td>Goal</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>airfoil</td>
-      <td>NASA data set, obtained from a series of aerodynamic and acoustic tests of two and three-dimensional airfoil blade sections conducted in an anechoic wind tunnel.</td>
-      <td>5</td>
-      <td>0</td>
-      <td>5</td>
-      <td>1503</td>
-      <td>No</td>
-      <td>High</td>
-      <td>0.8</td>
-      <td>80</td>
-      <td>5.32%</td>
-      <td>scaled-sound-pressure</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>anacalt</td>
-      <td>The data contains information about the decisions taken by a supreme court.</td>
-      <td>7</td>
-      <td>0</td>
-      <td>7</td>
-      <td>4052</td>
-      <td>No</td>
-      <td>Both</td>
-      <td>0.8</td>
-      <td>0</td>
-      <td>0.00%</td>
-      <td>Log_exposure</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>appliances_energy</td>
-      <td>Experimental data used to create regression models of appliances energy use in a low energy building.</td>
-      <td>27</td>
-      <td>0</td>
-      <td>27</td>
-      <td>19735</td>
-      <td>No</td>
-      <td>Both</td>
-      <td>0.8</td>
-      <td>8212</td>
-      <td>41.61%</td>
-      <td>Appliances</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>autoprices</td>
-      <td>Dataset with feature leading to the prediction of its price.</td>
-      <td>16</td>
-      <td>1</td>
-      <td>15</td>
-      <td>159</td>
-      <td>No</td>
-      <td>Both</td>
-      <td>0.8</td>
-      <td>0</td>
-      <td>0.00%</td>
-      <td>class</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>availablePower</td>
-      <td>Dataset with power statistics.</td>
-      <td>15</td>
-      <td>7</td>
-      <td>8</td>
-      <td>1802</td>
-      <td>No</td>
-      <td>Both</td>
-      <td>0.8</td>
-      <td>305</td>
-      <td>16.93%</td>
-      <td>available.power</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>bank8FM</td>
-      <td>Part of a family of datasets synthetically generated from a simulation of how bank-customers choose their banks.</td>
-      <td>8</td>
-      <td>0</td>
-      <td>8</td>
-      <td>4499</td>
-      <td>No</td>
-      <td>Both</td>
-      <td>0.8</td>
-      <td>0</td>
-      <td>0.00%</td>
-      <td>rej</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>baseball</td>
-      <td>This dataset contains the 1992 salaries of the set of Major League Baseball players who played at least one game in both the 1991 and 1992 seasons, excluding pitchers.</td>
-      <td>16</td>
-      <td>0</td>
-      <td>16</td>
-      <td>337</td>
-      <td>No</td>
-      <td>Both</td>
-      <td>0.8</td>
-      <td>0</td>
-      <td>0.00%</td>
-      <td>Salary</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>californiaHousing</td>
-      <td>This data set contains information about all the block groups in California from the 1990 Census.</td>
-      <td>8</td>
-      <td>0</td>
-      <td>8</td>
-      <td>20640</td>
-      <td>No</td>
-      <td>Low</td>
-      <td>0.8</td>
-      <td>1802</td>
-      <td>8.73%</td>
-      <td>MedianHouseValue</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>cocomo</td>
-      <td>Software Engineering Repository data set made publicly available in order to encourage repeatable, verifiable, refutable, and/or improvable predictive models of software engineering.</td>
-      <td>16</td>
-      <td>1</td>
-      <td>1</td>
-      <td>60</td>
-      <td>No</td>
-      <td>Low</td>
-      <td>0.8</td>
-      <td>14</td>
-      <td>23.33%</td>
-      <td>ACT_EFFORT</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>concrete</td>
-      <td>Concrete Compressive Strength data set</td>
-      <td>8</td>
-      <td>0</td>
-      <td>8</td>
-      <td>1030</td>
-      <td>No</td>
-      <td>Low</td>
-      <td>0.8</td>
-      <td>0</td>
-      <td>0.00%</td>
-      <td>ConcreteCompressiveStrength</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>cpuActiv</td>
-      <td>Computer activity data set</td>
-      <td>21</td>
-      <td>0</td>
-      <td>21</td>
-      <td>8192</td>
-      <td>No</td>
-      <td>Low</td>
-      <td>0.8</td>
-      <td>371</td>
-      <td>4.53%</td>
-      <td>Usr</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>cpuSm</td>
-      <td>The Computer Activity databases are a collection of computer systems activity measures. The data was collected from a Sun Sparcstation 20/712 with 128 Mbytes of memory running in a multi-user university department. The final dataset is taken from both occasions with equal numbers of observations coming from each collection epoch.</td>
-      <td>12</td>
-      <td>0</td>
-      <td>12</td>
-      <td>8192</td>
-      <td>No</td>
-      <td>Low</td>
-      <td>0.8</td>
-      <td>371</td>
-      <td>4.53%</td>
-      <td>usr</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>debutanizer</td>
-      <td>The debutanizer dataset is part of a desulfuring and naphtha splitter plant data.</td>
-      <td>7</td>
-      <td>0</td>
-      <td>7</td>
-      <td>2394</td>
-      <td>No</td>
-      <td>High</td>
-      <td>0.8</td>
-      <td>212</td>
-      <td>8.86%</td>
-      <td>y</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>deltaAirlerons</td>
-      <td>This data set is also obtained from the task of controlling the ailerons of a F16 aircraft.</td>
-      <td>5</td>
-      <td>0</td>
-      <td>5</td>
-      <td>7129</td>
-      <td>No</td>
-      <td>Both</td>
-      <td>0.8</td>
-      <td>1206</td>
-      <td>16.92%</td>
-      <td>Sa</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>deltaElevators</td>
-      <td>This data set is also obtained from the task of controlling the elevators of a F16 aircraft.</td>
-      <td>60</td>
-      <td>0</td>
-      <td>6</td>
-      <td>9517</td>
-      <td>No</td>
-      <td>High</td>
-      <td>0.8</td>
-      <td>4785</td>
-      <td>50.28%</td>
-      <td>Se</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>diabetes</td>
-      <td>This data set concerns the study of the factors affecting patterns of insulin-dependent diabetes mellitus in children.</td>
-      <td>2</td>
-      <td>0</td>
-      <td>2</td>
-      <td>43</td>
-      <td>No</td>
-      <td>High</td>
-      <td>0.8</td>
-      <td>6</td>
-      <td>13.95%</td>
-      <td>C_peptide</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>ele-1</td>
-      <td>Electrical Length data set</td>
-      <td>2</td>
-      <td>0</td>
-      <td>2</td>
-      <td>495</td>
-      <td>No</td>
-      <td>High</td>
-      <td>0.8</td>
-      <td>21</td>
-      <td>4.24%</td>
-      <td>Length</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>ele-2</td>
-      <td>Electrical-Maintenance data set</td>
-      <td>4</td>
-      <td>0</td>
-      <td>4</td>
-      <td>1056</td>
-      <td>No</td>
-      <td>Both</td>
-      <td>0.8</td>
-      <td>0</td>
-      <td>0.00%</td>
-      <td>Y</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>elevators</td>
-      <td>The attributes describe the status of the aeroplane, while the goal is to predict the control action on the ailerons of the aircraft.</td>
-      <td>18</td>
-      <td>0</td>
-      <td>18</td>
-      <td>16599</td>
-      <td>No</td>
-      <td>Both</td>
-      <td>0.8</td>
-      <td>4390</td>
-      <td>26.45%</td>
-      <td>Goal</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>forestFires</td>
-      <td>Forest Fires data set</td>
-      <td>12</td>
-      <td>0</td>
-      <td>12</td>
-      <td>517</td>
-      <td>No</td>
-      <td>High</td>
-      <td>0.8</td>
-      <td>15</td>
-      <td>2.90%</td>
-      <td>Area</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>friedman</td>
-      <td>Friedman Benchmark Function data set</td>
-      <td>5</td>
-      <td>0</td>
-      <td>5</td>
-      <td>1200</td>
-      <td>No</td>
-      <td>Both</td>
-      <td>0.8</td>
-      <td>0</td>
-      <td>0.00%</td>
-      <td>Output</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>fuelConsumption</td>
-      <td>The data contains information about car’s emissions and fuel consumption.</td>
-      <td>37</td>
-      <td>12</td>
-      <td>25</td>
-      <td>1764</td>
-      <td>No</td>
-      <td>Both</td>
-      <td>0.8</td>
-      <td>167</td>
-      <td>9.47%</td>
-      <td>fuel.counsumption.country</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>geographical_origin_music</td>
-      <td>Instances in this dataset contain audio features extracted from 1059 wave files. The task associated with the data is to predict the geographical origin of music.</td>
-      <td>117</td>
-      <td>0</td>
-      <td>117</td>
-      <td>1059</td>
-      <td>No</td>
-      <td>Both</td>
-      <td>0.8</td>
-      <td>104</td>
-      <td>9.82%</td>
-      <td>V100</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>heat</td>
-      <td>Dataset with heating statistics.</td>
-      <td>11</td>
-      <td>3</td>
-      <td>8</td>
-      <td>7400</td>
-      <td>No</td>
-      <td>Both</td>
-      <td>0.8</td>
-      <td>833</td>
-      <td>11.26%</td>
-      <td>heat</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>house16H</td>
-      <td>This database was designed on the basis of data provided by US Census Bureau.</td>
-      <td>16</td>
-      <td>0</td>
-      <td>16</td>
-      <td>22784</td>
-      <td>No</td>
-      <td>Both</td>
-      <td>0.8</td>
-      <td>6098</td>
-      <td>26.76%</td>
-      <td>Price</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>housing</td>
-      <td>The Ames Housing Dataset is a well-known dataset in the field of machine learning and data analysis. It contains various features and attributes of residential homes in Ames, Iowa, USA.</td>
-      <td>79</td>
-      <td>43</td>
-      <td>36</td>
-      <td>1460</td>
-      <td>Yes (7829)</td>
-      <td>Both</td>
-      <td>0.8</td>
-      <td>179</td>
-      <td>12.26%</td>
-      <td>SalePrice</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>housingBoston</td>
-      <td>This dataset contains information collected by the U.S Census Service concerning housing in the area of Boston Mass.</td>
-      <td>13</td>
-      <td>0</td>
-      <td>13</td>
-      <td>506</td>
-      <td>No</td>
-      <td>Both</td>
-      <td>0.8</td>
-      <td>105</td>
-      <td>20.75%</td>
-      <td>HousValue</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>kdd_coil_1</td>
-      <td>This data set is from the 1999 Computational Intelligence and Learning (COIL) competition. The data contains measurements of river chemical concentrations and algae densities.</td>
-      <td>11</td>
-      <td>3</td>
-      <td>8</td>
-      <td>316</td>
-      <td>Yes (56)</td>
-      <td>Both</td>
-      <td>0.8</td>
-      <td>0</td>
-      <td>0.00%</td>
-      <td>algae_1</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>kinematics8nm</td>
-      <td>This is data set is concerned with the forward kinematics of an 8 link robot arm.</td>
-      <td>8</td>
-      <td>0</td>
-      <td>8</td>
-      <td>8192</td>
-      <td>No</td>
-      <td>Both</td>
-      <td>0.8</td>
-      <td>0</td>
-      <td>0.00%</td>
-      <td>y</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>laser</td>
-      <td>Laser generated data set</td>
-      <td>4</td>
-      <td>0</td>
-      <td>4</td>
-      <td>993</td>
-      <td>No</td>
-      <td>Both</td>
-      <td>0.8</td>
-      <td>0</td>
-      <td>0.00%</td>
-      <td>Output</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>lungcancer-shedden</td>
-      <td>Prediction in Lung Adenocarcinoma</td>
-      <td>23</td>
-      <td>3</td>
-      <td>20</td>
-      <td>442</td>
-      <td>No</td>
-      <td>High</td>
-      <td>0.8</td>
-      <td>12</td>
-      <td>2.71%</td>
-      <td>OS_years</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>machineCPU</td>
-      <td>Machine CPU Performance data set</td>
-      <td>6</td>
-      <td>0</td>
-      <td>6</td>
-      <td>209</td>
-      <td>No</td>
-      <td>Both</td>
-      <td>0.8</td>
-      <td>46</td>
-      <td>22.01%</td>
-      <td>PRP</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>maxTorque</td>
-      <td>Dataset with torque statistics.</td>
-      <td>32</td>
-      <td>13</td>
-      <td>19</td>
-      <td>1802</td>
-      <td>No</td>
-      <td>Both</td>
-      <td>0.8</td>
-      <td>235</td>
-      <td>13.04%</td>
-      <td>maximal.torque</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>meta</td>
-      <td>Meta-Data was used in order to give advice about which classification method is appropriate for a particular dataset.</td>
-      <td>21</td>
-      <td>2</td>
-      <td>19</td>
-      <td>528</td>
-      <td>Yes (504)</td>
-      <td>Both</td>
-      <td>0.8</td>
-      <td>165</td>
-      <td>31.25%</td>
-      <td>class</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>mortgage</td>
-      <td>Mortgage data set</td>
-      <td>15</td>
-      <td>0</td>
-      <td>15</td>
-      <td>1049</td>
-      <td>No</td>
-      <td>Low</td>
-      <td>0.8</td>
-      <td>133</td>
-      <td>12.68%</td>
-      <td>30Y-CMortgageRate</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>pdgfr</td>
-      <td>This is one of 41 drug design datasets.</td>
-      <td>320</td>
-      <td>0</td>
-      <td>320</td>
-      <td>79</td>
-      <td>No</td>
-      <td>High</td>
-      <td>0.8</td>
-      <td>15</td>
-      <td>18.99%</td>
-      <td>oz322</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>pollen</td>
-      <td>This dataset is synthetic. It was generated by David Coleman at RCA Laboratories in Princeton, N.J. For convenience, we will refer to it as the POLLEN DATA.</td>
-      <td>5</td>
-      <td>0</td>
-      <td>5</td>
-      <td>3848</td>
-      <td>No</td>
-      <td>Both</td>
-      <td>0.8</td>
-      <td>242</td>
-      <td>6.29%</td>
-      <td>DENSITY</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>puma32NH</td>
-      <td>This is a family of datasets synthetically generated from a realistic simulation of the dynamics of a Unimation Puma 560 robot arm.</td>
-      <td>32</td>
-      <td>0</td>
-      <td>32</td>
-      <td>8192</td>
-      <td>Yes\n(33)</td>
-      <td>Both</td>
-      <td>0.8</td>
-      <td>0</td>
-      <td>0.00%</td>
-      <td>thetadd6</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>puma8NH</td>
-      <td>This is a family of datasets synthetically generated from a realistic simulation of the dynamics of a Unimation Puma 560 robot arm.</td>
-      <td>8</td>
-      <td>0</td>
-      <td>8</td>
-      <td>8192</td>
-      <td>Yes\n(9)</td>
-      <td>Both</td>
-      <td>0.8</td>
-      <td>0</td>
-      <td>0.00%</td>
-      <td>thetadd3</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>quake</td>
-      <td>Quake data set</td>
-      <td>3</td>
-      <td>0</td>
-      <td>3</td>
-      <td>2178</td>
-      <td>No</td>
-      <td>Both</td>
-      <td>0.8</td>
-      <td>0</td>
-      <td>0.00%</td>
-      <td>Richter</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>sensory</td>
-      <td>Data for the sensory evaluation experiment in Brien, C.J. and Payne, R.W. (1996) Tiers, structure formulae and the analysis of complicated experiments.</td>
-      <td>11</td>
-      <td>0</td>
-      <td>11</td>
-      <td>576</td>
-      <td>No</td>
-      <td>Both</td>
-      <td>0.8</td>
-      <td>69</td>
-      <td>11.98%</td>
-      <td>Score</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>servo</td>
-      <td>This is an interesting collection of data provided by Karl Ulrich. It covers an extremely non-linear phenomenon - predicting the rise time of a servomechanism in terms of two (continuous) gain settings and two (discrete) choices of mechanical linkages.</td>
-      <td>4</td>
-      <td>4</td>
-      <td>0</td>
-      <td>167</td>
-      <td>No</td>
-      <td>Both</td>
-      <td>0.8</td>
-      <td>59</td>
-      <td>35.33%</td>
-      <td>class</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>space_ga</td>
-      <td>The dataset contains 3,107 observations on U.S. county votes cast in the 1980 presidential election.</td>
-      <td>6</td>
-      <td>0</td>
-      <td>6</td>
-      <td>3107</td>
-      <td>No</td>
-      <td>Both</td>
-      <td>0.8</td>
-      <td>182</td>
-      <td>5.86%</td>
-      <td>ln_votes_pop</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>stock</td>
-      <td>Stock Prices data set</td>
-      <td>9</td>
-      <td>0</td>
-      <td>9</td>
-      <td>950</td>
-      <td>No</td>
-      <td>Both</td>
-      <td>0.8</td>
-      <td>0</td>
-      <td>0.00%</td>
-      <td>Company10</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>strikes</td>
-      <td>The data consist of annual observations on the level of strike volume (days lost due to industrial disputes per 1000 wage salary earners), and their covariates in 18 OECD countries from 1951-1985.</td>
-      <td>6</td>
-      <td>0</td>
-      <td>6</td>
-      <td>625</td>
-      <td>No</td>
-      <td>High</td>
-      <td>0.8</td>
-      <td>15</td>
-      <td>2.40%</td>
-      <td>strike_volume</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>sulfer_1</td>
-      <td>The sulfur recovery unit (SRU) removes environmental pollutants from acid gas streams before they are released into the atmosphere. Furthermore, elemental sulfur is recovered as a valuable by-product.</td>
-      <td>5</td>
-      <td>0</td>
-      <td>5</td>
-      <td>10081</td>
-      <td>No</td>
-      <td>Both</td>
-      <td>0.8</td>
-      <td>1117</td>
-      <td>11.08%</td>
-      <td>y1</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>sulfer_2</td>
-      <td>The sulfur recovery unit (SRU) removes environmental pollutants from acid gas streams before they are released into the atmosphere. Furthermore, 0.8elemental sulfur is recovered as a valuable by-product.</td>
-      <td>5</td>
-      <td>0</td>
-      <td>5</td>
-      <td>10081</td>
-      <td>No</td>
-      <td>Both</td>
-      <td>0.8</td>
-      <td>1444</td>
-      <td>14.32%</td>
-      <td>y2</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>supercondutivity</td>
-      <td>Two files contain data on 21263 superconductors and their relevant features.</td>
-      <td>81</td>
-      <td>0</td>
-      <td>81</td>
-      <td>21263</td>
-      <td>No</td>
-      <td>Both</td>
-      <td>0.8</td>
-      <td>0</td>
-      <td>0.00%</td>
-      <td>critical_temp</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>treasury</td>
-      <td>This file contains the Economic data information of USA from 01/04/1980 to 02/04/2000 on a weekly basis.</td>
-      <td>15</td>
-      <td>0</td>
-      <td>15</td>
-      <td>1049</td>
-      <td>No</td>
-      <td>Low</td>
-      <td>0.8</td>
-      <td>137</td>
-      <td>13.06%</td>
-      <td>1MonthCDRate</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>triazines</td>
-      <td>A triazine dataset. The goal is to predict the inhibition of dihydrofolate reductase by triazines.</td>
-      <td>60</td>
-      <td>0</td>
-      <td>60</td>
-      <td>186</td>
-      <td>No</td>
-      <td>Both</td>
-      <td>0.8</td>
-      <td>23</td>
-      <td>12.37%</td>
-      <td>activity</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>wankara</td>
-      <td>This file contains the weather information of Ankara from 01/01/1994 to 28/05/1998.</td>
-      <td>9</td>
-      <td>0</td>
-      <td>9</td>
-      <td>1609</td>
-      <td>No</td>
-      <td>Both</td>
-      <td>0.8</td>
-      <td>0</td>
-      <td>0.00%</td>
-      <td>Mean_temperature</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>wine-quality</td>
-      <td>The two datasets are combined and related to red and white variants of the Portuguese "Vinho Verde" wine.</td>
-      <td>12</td>
-      <td>1</td>
-      <td>11</td>
-      <td>6497</td>
-      <td>No</td>
-      <td>High</td>
-      <td>0.8</td>
-      <td>4113</td>
-      <td>63.31%</td>
-      <td>quality</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <td>yachtHydrodynamics</td>
-      <td>Delft data set, used to predict the hydodynamic performance of sailing yachts from dimensions and velocity.</td>
-      <td>6</td>
-      <td>0</td>
-      <td>6</td>
-      <td>308</td>
-      <td>No</td>
-      <td>Both</td>
-      <td>0.8</td>
-      <td>0</td>
-      <td>0.00%</td>
-      <td>Residuary_Resistance</td>
-      <td>0</td>
-    </tr>
-  </tbody>
+<div class="dark-toggle" onclick="toggleDarkMode()">🌙 Toggle Dark Mode</div>
+<div class="container my-5">
+<h1 class="mb-4" style="color:#74698C;">Imbalanced Regression Dataset Repository</h1>
+<h5 class="text-muted mb-4">A curated collection of datasets for extreme value-aware regression tasks</h5>
+<p>This page provides access to 62 datasets with metadata on features, target imbalance, extreme values, and missing data characteristics. Ideal for benchmarking regression models under imbalanced conditions.</p>
+<p>This repository has been constructed and used in the following work:<br/>
+The data is available in two formats: <strong>CSV</strong> and <strong>ARFF</strong>.</p>
+<div class="d-flex gap-3 mb-4">
+<a class="btn btn-primary" href="https://github.com/antoniopedropi/Datasets-ImbalancedRegression/archive/refs/heads/main.zip" target="_blank">
+<i class="fas fa-file-archive"></i> Download CSVs
+    </a>
+<a class="btn btn-success" href="https://github.com/antoniopedropi/Datasets-ImbalancedRegression/tree/main/Datasets_ARFF" target="_blank">
+<i class="fas fa-download"></i> Download ARFFs
+    </a>
+<a class="btn btn-dark" href="https://github.com/antoniopedropi/Datasets-ImbalancedRegression" target="_blank">
+<i class="fab fa-github"></i> View on GitHub
+    </a>
+</div>
+<div class="table-responsive">
+<table class="table table-striped table-hover table-bordered table-hover table-bordered align-middle display nowrap" id="datasetTable" style="width:100%">
+<thead>
+<tr><th>Dataset</th><th>Description</th><th>Features</th><th>Nominal Features</th><th>Numeric Features</th><th>Instances</th><th>Missing Values</th><th>Type of Extreme</th><th>Relevance Threshold</th><th>#
+Rare</th><th>% Rare</th><th>Target Variable</th><th>Target Variable Index Position</th><th>Source</th></tr>
+</thead>
+<tbody>
+<tr><td>a1</td><td class="desc-cell">The data points are taken on an annual basis from various streams / rivers in Europe, compiling features aimed at predicting the concentrations of seven algae species.</td><td>11</td><td>3</td><td>8</td><td>198</td><td>No</td><td>Both</td><td>0.8</td><td>0</td><td>0.00%</td><td>a1</td><td>0</td><td>[1]</td></tr>
+<tr><td>a2</td><td class="desc-cell">The data points are taken on an annual basis from various streams / rivers in Europe, compiling features aimed at predicting the concentrations of seven algae species.</td><td>11</td><td>3</td><td>8</td><td>198</td><td>No</td><td>Both</td><td>0.8</td><td>0</td><td>0.00%</td><td>a2</td><td>0</td><td>[1]</td></tr>
+<tr><td>a3</td><td class="desc-cell">The data points are taken on an annual basis from various streams / rivers in Europe, compiling features aimed at predicting the concentrations of seven algae species.</td><td>11</td><td>3</td><td>8</td><td>198</td><td>No</td><td>Both</td><td>0.8</td><td>0</td><td>0.00%</td><td>a3</td><td>0</td><td>[1]</td></tr>
+<tr><td>a4</td><td class="desc-cell">The data points are taken on an annual basis from various streams / rivers in Europe, compiling features aimed at predicting the concentrations of seven algae species.</td><td>11</td><td>3</td><td>8</td><td>198</td><td>No</td><td>Both</td><td>0.8</td><td>0</td><td>0.00%</td><td>a4</td><td>0</td><td>[1]</td></tr>
+<tr><td>a6</td><td class="desc-cell">The data points are taken on an annual basis from variousstreams / rivers in Europe, compiling features aimed at predicting the concentrations of seven algae species.</td><td>11</td><td>3</td><td>8</td><td>198</td><td>No</td><td>Both</td><td>0.8</td><td>0</td><td>0.00%</td><td>a6</td><td>0</td><td>[1]</td></tr>
+<tr><td>a7</td><td class="desc-cell">The data points are taken on an annual basis from various streams / rivers in Europe, compiling features aimed at predicting the concentrations of seven algae species.</td><td>11</td><td>3</td><td>8</td><td>198</td><td>No</td><td>High</td><td>0.8</td><td>14</td><td>7.07%</td><td>a7</td><td>0</td><td>[1]</td></tr>
+<tr><td>abalone</td><td class="desc-cell">Predict the age of abalone from physical measurements.</td><td>8</td><td>1</td><td>7</td><td>4177</td><td>No</td><td>Both</td><td>0.8</td><td>1033</td><td>24.73%</td><td>Rings</td><td>0</td><td>[2]</td></tr>
+<tr><td>acceleration</td><td class="desc-cell">Dataset with acceleration statistics.</td><td>14</td><td>3</td><td>11</td><td>1732</td><td>No</td><td>Both</td><td>0.8</td><td>158</td><td>9.12%</td><td>acceleration</td><td>0</td><td>[3]</td></tr>
+<tr><td>ailerons</td><td class="desc-cell">The attributes describe the status of the aeroplane, while the goal is to predict the control action on the ailerons of the aircraft.</td><td>40</td><td>0</td><td>40</td><td>13515</td><td>No</td><td>Both</td><td>0.8</td><td>1622</td><td>11.80%</td><td>Goal</td><td>0</td><td>[4]</td></tr>
+<tr><td>airfoil</td><td class="desc-cell">NASA data set, obtained from a series of aerodynamic and acoustic tests of two and three-dimensional airfoil blade sections conducted in an anechoic wind tunnel.</td><td>5</td><td>0</td><td>5</td><td>1503</td><td>No</td><td>High</td><td>0.8</td><td>80</td><td>5.32%</td><td>scaled-sound-pressure</td><td>0</td><td>[5]</td></tr>
+<tr><td>anacalt</td><td class="desc-cell">The data contains information about the decisions taken by a supreme court.</td><td>7</td><td>0</td><td>7</td><td>4052</td><td>No</td><td>Both</td><td>0.8</td><td>0</td><td>0.00%</td><td>Log_exposure</td><td>0</td><td>[4]</td></tr>
+<tr><td>appliances_energy</td><td class="desc-cell">Experimental data used to create regression models of appliances energy use in a low energy building.</td><td>27</td><td>0</td><td>27</td><td>19735</td><td>No</td><td>Both</td><td>0.8</td><td>8212</td><td>41.61%</td><td>Appliances</td><td>0</td><td>[6]</td></tr>
+<tr><td>autoprices</td><td class="desc-cell">Dataset with feature leading to the prediction of its price.</td><td>16</td><td>1</td><td>15</td><td>159</td><td>No</td><td>Both</td><td>0.8</td><td>0</td><td>0.00%</td><td>class</td><td>0</td><td>[7]</td></tr>
+<tr><td>availablePower</td><td class="desc-cell">Dataset with power statistics.</td><td>15</td><td>7</td><td>8</td><td>1802</td><td>No</td><td>Both</td><td>0.8</td><td>305</td><td>16.93%</td><td>available.power</td><td>0</td><td>[8]</td></tr>
+<tr><td>bank8FM</td><td class="desc-cell">Part of a family of datasets synthetically generated from a simulation of how bank-customers choose their banks.</td><td>8</td><td>0</td><td>8</td><td>4499</td><td>No</td><td>Both</td><td>0.8</td><td>0</td><td>0.00%</td><td>rej</td><td>0</td><td>[9]</td></tr>
+<tr><td>baseball</td><td class="desc-cell">This dataset contains the 1992 salaries of the set of Major League Baseball players who played at least one game in both the 1991 and 1992 seasons, excluding pitchers.</td><td>16</td><td>0</td><td>16</td><td>337</td><td>No</td><td>Both</td><td>0.8</td><td>0</td><td>0.00%</td><td>Salary</td><td>0</td><td>[10]</td></tr>
+<tr><td>californiaHousing</td><td class="desc-cell">This data set contains information about all the block groups in California from the 1990 Census.</td><td>8</td><td>0</td><td>8</td><td>20640</td><td>No</td><td>Low</td><td>0.8</td><td>1802</td><td>8.73%</td><td>MedianHouseValue</td><td>0</td><td>[11]</td></tr>
+<tr><td>cocomo</td><td class="desc-cell">Software Engineering Repository data set made publicly available in order to encourage repeatable, verifiable, refutable, and/or improvable predictive models of software engineering.</td><td>16</td><td>1</td><td>1</td><td>60</td><td>No</td><td>Low</td><td>0.8</td><td>14</td><td>23.33%</td><td>ACT_EFFORT</td><td>0</td><td>[12]</td></tr>
+<tr><td>concrete</td><td class="desc-cell">Concrete Compressive Strength data set</td><td>8</td><td>0</td><td>8</td><td>1030</td><td>No</td><td>Low</td><td>0.8</td><td>0</td><td>0.00%</td><td>ConcreteCompressiveStrength</td><td>0</td><td>[13]</td></tr>
+<tr><td>cpuActiv</td><td class="desc-cell">Computer activity data set</td><td>21</td><td>0</td><td>21</td><td>8192</td><td>No</td><td>Low</td><td>0.8</td><td>371</td><td>4.53%</td><td>Usr</td><td>0</td><td>[9]</td></tr>
+<tr><td>cpuSm</td><td class="desc-cell">The Computer Activity databases are a collection of computer systems activity measures. The data was collected from a Sun Sparcstation 20/712 with 128 Mbytes of memory running in a multi-user university department. The final dataset is taken from both occasions with equal numbers of observations coming from each collection epoch.</td><td>12</td><td>0</td><td>12</td><td>8192</td><td>No</td><td>Low</td><td>0.8</td><td>371</td><td>4.53%</td><td>usr</td><td>0</td><td>[9]</td></tr>
+<tr><td>debutanizer</td><td class="desc-cell">This dataset aims to predict the butane concentration on a Debutanizer column.</td><td>7</td><td>0</td><td>7</td><td>2394</td><td>No</td><td>High</td><td>0.8</td><td>212</td><td>8.86%</td><td>y</td><td>0</td><td>[14]</td></tr>
+<tr><td>deltaAirlerons</td><td class="desc-cell">This data set is also obtained from the task of controlling the ailerons of a F16 aircraft.</td><td>5</td><td>0</td><td>5</td><td>7129</td><td>No</td><td>Both</td><td>0.8</td><td>1206</td><td>16.92%</td><td>Sa</td><td>0</td><td>[4]</td></tr>
+<tr><td>deltaElevators</td><td class="desc-cell">This data set is also obtained from the task of controlling the elevators of a F16 aircraft.</td><td>60</td><td>0</td><td>6</td><td>9517</td><td>No</td><td>High</td><td>0.8</td><td>4785</td><td>50.28%</td><td>Se</td><td>0</td><td>[4]</td></tr>
+<tr><td>diabetes</td><td class="desc-cell">This data set concerns the study of the factors affecting patterns of insulin-dependent diabetes mellitus in children.</td><td>2</td><td>0</td><td>2</td><td>43</td><td>No</td><td>High</td><td>0.8</td><td>6</td><td>13.95%</td><td>C_peptide</td><td>0</td><td>[4]</td></tr>
+<tr><td>ele-1</td><td class="desc-cell">Electrical Length data set</td><td>2</td><td>0</td><td>2</td><td>495</td><td>No</td><td>High</td><td>0.8</td><td>21</td><td>4.24%</td><td>Length</td><td>0</td><td>[4]</td></tr>
+<tr><td>ele-2</td><td class="desc-cell">Electrical-Maintenance data set</td><td>4</td><td>0</td><td>4</td><td>1056</td><td>No</td><td>Both</td><td>0.8</td><td>0</td><td>0.00%</td><td>Y</td><td>0</td><td>[4]</td></tr>
+<tr><td>elevators</td><td class="desc-cell">The attributes describe the status of the aeroplane, while the goal is to predict the control action on the ailerons of the aircraft.</td><td>18</td><td>0</td><td>18</td><td>16599</td><td>No</td><td>Both</td><td>0.8</td><td>4390</td><td>26.45%</td><td>Goal</td><td>0</td><td>[15]</td></tr>
+<tr><td>forestFires</td><td class="desc-cell">Forest Fires data set</td><td>12</td><td>0</td><td>12</td><td>517</td><td>No</td><td>High</td><td>0.8</td><td>15</td><td>2.90%</td><td>Area</td><td>0</td><td>[16]</td></tr>
+<tr><td>friedman</td><td class="desc-cell">Friedman Benchmark Function data set</td><td>5</td><td>0</td><td>5</td><td>1200</td><td>No</td><td>Both</td><td>0.8</td><td>0</td><td>0.00%</td><td>Output</td><td>0</td><td>[4]</td></tr>
+<tr><td>fuelConsumption</td><td class="desc-cell">The data contains information about car’s emissions and fuel consumption.</td><td>37</td><td>12</td><td>25</td><td>1764</td><td>No</td><td>Both</td><td>0.8</td><td>167</td><td>9.47%</td><td>fuel.counsumption.country</td><td>0</td><td>[17]</td></tr>
+<tr><td>geographical_origin_music</td><td class="desc-cell">Instances in this dataset contain audio features extracted from 1059 wave files. The task associated with the data is to predict the geographical origin of music.</td><td>117</td><td>0</td><td>117</td><td>1059</td><td>No</td><td>Both</td><td>0.8</td><td>104</td><td>9.82%</td><td>V100</td><td>0</td><td>[18]</td></tr>
+<tr><td>heat</td><td class="desc-cell">Dataset with heating statistics.</td><td>11</td><td>3</td><td>8</td><td>7400</td><td>No</td><td>Both</td><td>0.8</td><td>833</td><td>11.26%</td><td>heat</td><td>0</td><td>[8]</td></tr>
+<tr><td>house16H</td><td class="desc-cell">This database was designed on the basis of data provided by US Census Bureau.</td><td>16</td><td>0</td><td>16</td><td>22784</td><td>No</td><td>Both</td><td>0.8</td><td>6098</td><td>26.76%</td><td>Price</td><td>0</td><td>[9]</td></tr>
+<tr><td>housing</td><td class="desc-cell">The Ames Housing Dataset is a well-known dataset in the field of machine learning and data analysis. It contains various features and attributes of residential homes in Ames, Iowa, USA.</td><td>79</td><td>43</td><td>36</td><td>1460</td><td>Yes (7829)</td><td>Both</td><td>0.8</td><td>179</td><td>12.26%</td><td>SalePrice</td><td>0</td><td>[19]</td></tr>
+<tr><td>housingBoston</td><td class="desc-cell">This dataset contains information collected by the U.S Census Service concerning housing in the area of Boston Mass.</td><td>13</td><td>0</td><td>13</td><td>506</td><td>No</td><td>Both</td><td>0.8</td><td>105</td><td>20.75%</td><td>HousValue</td><td>0</td><td>[20]</td></tr>
+<tr><td>kdd_coil_1</td><td class="desc-cell">This data set is from the 1999 Computational Intelligence and Learning (COIL) competition. The data contains measurements of river chemical concentrations and algae densities.</td><td>11</td><td>3</td><td>8</td><td>316</td><td>Yes (56)</td><td>Both</td><td>0.8</td><td>0</td><td>0.00%</td><td>algae_1</td><td>0</td><td>[21]</td></tr>
+<tr><td>kinematics8nm</td><td class="desc-cell">This is data set is concerned with the forward kinematics of an 8 link robot arm.</td><td>8</td><td>0</td><td>8</td><td>8192</td><td>No</td><td>Both</td><td>0.8</td><td>0</td><td>0.00%</td><td>y</td><td>0</td><td>[9]</td></tr>
+<tr><td>laser</td><td class="desc-cell">Laser generated data set</td><td>4</td><td>0</td><td>4</td><td>993</td><td>No</td><td>Both</td><td>0.8</td><td>0</td><td>0.00%</td><td>Output</td><td>0</td><td>[4]</td></tr>
+<tr><td>lungcancer-shedden</td><td class="desc-cell">Prediction in Lung Adenocarcinoma</td><td>23</td><td>3</td><td>20</td><td>442</td><td>No</td><td>High</td><td>0.8</td><td>12</td><td>2.71%</td><td>OS_years</td><td>0</td><td>[22]</td></tr>
+<tr><td>machineCPU</td><td class="desc-cell">Machine CPU Performance data set</td><td>6</td><td>0</td><td>6</td><td>209</td><td>No</td><td>Both</td><td>0.8</td><td>46</td><td>22.01%</td><td>PRP</td><td>0</td><td>[4]</td></tr>
+<tr><td>maxTorque</td><td class="desc-cell">Dataset with torque statistics.</td><td>32</td><td>13</td><td>19</td><td>1802</td><td>No</td><td>Both</td><td>0.8</td><td>235</td><td>13.04%</td><td>maximal.torque</td><td>0</td><td>[23]</td></tr>
+<tr><td>meta</td><td class="desc-cell">Meta-Data was used in order to give advice about which classification method is appropriate for a particular dataset.</td><td>21</td><td>2</td><td>19</td><td>528</td><td>Yes (504)</td><td>Both</td><td>0.8</td><td>165</td><td>31.25%</td><td>class</td><td>0</td><td>[24]</td></tr>
+<tr><td>mortgage</td><td class="desc-cell">Mortgage data set</td><td>15</td><td>0</td><td>15</td><td>1049</td><td>No</td><td>Low</td><td>0.8</td><td>133</td><td>12.68%</td><td>30Y-CMortgageRate</td><td>0</td><td>[25]</td></tr>
+<tr><td>pdgfr</td><td class="desc-cell">This is one of 41 drug design datasets.</td><td>320</td><td>0</td><td>320</td><td>79</td><td>No</td><td>High</td><td>0.8</td><td>15</td><td>18.99%</td><td>oz322</td><td>0</td><td>[26]</td></tr>
+<tr><td>pollen</td><td class="desc-cell">This dataset is synthetic. It was generated by David Coleman at RCA Laboratories in Princeton, N.J.</td><td>5</td><td>0</td><td>5</td><td>3848</td><td>No</td><td>Both</td><td>0.8</td><td>242</td><td>6.29%</td><td>DENSITY</td><td>0</td><td>[27]</td></tr>
+<tr><td>puma32NH</td><td class="desc-cell">This is a family of datasets synthetically generated from a realistic simulation of the dynamics of a Unimation Puma 560 robot arm.</td><td>32</td><td>0</td><td>32</td><td>8192</td><td>Yes
+(33)</td><td>Both</td><td>0.8</td><td>0</td><td>0.00%</td><td>thetadd6</td><td>0</td><td>[9]</td></tr>
+<tr><td>puma8NH</td><td class="desc-cell">This is a family of datasets synthetically generated from a realistic simulation of the dynamics of a Unimation Puma 560 robot arm.</td><td>8</td><td>0</td><td>8</td><td>8192</td><td>Yes
+(9)</td><td>Both</td><td>0.8</td><td>0</td><td>0.00%</td><td>thetadd3</td><td>0</td><td>[9]</td></tr>
+<tr><td>quake</td><td class="desc-cell">Quake data set</td><td>3</td><td>0</td><td>3</td><td>2178</td><td>No</td><td>Both</td><td>0.8</td><td>0</td><td>0.00%</td><td>Richter</td><td>0</td><td>[4]</td></tr>
+<tr><td>sensory</td><td class="desc-cell">Data for the sensory evaluation experiment in Brien, C.J. and Payne, R.W. (1996) Tiers, structure formulae and the analysis of complicated experiments.</td><td>11</td><td>0</td><td>11</td><td>576</td><td>No</td><td>Both</td><td>0.8</td><td>69</td><td>11.98%</td><td>Score</td><td>0</td><td>[28]</td></tr>
+<tr><td>servo</td><td class="desc-cell">This is an interesting collection of data provided by Karl Ulrich. It covers an extremely non-linear phenomenon - predicting the rise time of a servomechanism in terms of two (continuous) gain settings and two (discrete) choices of mechanical linkages.</td><td>4</td><td>4</td><td>0</td><td>167</td><td>No</td><td>Both</td><td>0.8</td><td>59</td><td>35.33%</td><td>class</td><td>0</td><td>[15]</td></tr>
+<tr><td>space_ga</td><td class="desc-cell">The dataset contains 3,107 observations on U.S. county votes cast in the 1980 presidential election.</td><td>6</td><td>0</td><td>6</td><td>3107</td><td>No</td><td>Both</td><td>0.8</td><td>182</td><td>5.86%</td><td>ln_votes_pop</td><td>0</td><td>[29]</td></tr>
+<tr><td>stock</td><td class="desc-cell">Stock Prices data set</td><td>9</td><td>0</td><td>9</td><td>950</td><td>No</td><td>Both</td><td>0.8</td><td>0</td><td>0.00%</td><td>Company10</td><td>0</td><td>[30]</td></tr>
+<tr><td>strikes</td><td class="desc-cell">The data consist of annual observations on the level of strike volume (days lost due to industrial disputes per 1000 wage salary earners), and their covariates in 18 OECD countries from 1951-1985.</td><td>6</td><td>0</td><td>6</td><td>625</td><td>No</td><td>High</td><td>0.8</td><td>15</td><td>2.40%</td><td>strike_volume</td><td>0</td><td>[31]</td></tr>
+<tr><td>sulfer_1</td><td class="desc-cell">The sulfur recovery unit (SRU) removes environmental pollutants from acid gas streams before they are released into the atmosphere. Furthermore, elemental sulfur is recovered as a valuable by-product.</td><td>5</td><td>0</td><td>5</td><td>10081</td><td>No</td><td>Both</td><td>0.8</td><td>1117</td><td>11.08%</td><td>y1</td><td>0</td><td>[32]</td></tr>
+<tr><td>sulfer_2</td><td class="desc-cell">The sulfur recovery unit (SRU) removes environmental pollutants from acid gas streams before they are released into the atmosphere. Furthermore, 0.8elemental sulfur is recovered as a valuable by-product.</td><td>5</td><td>0</td><td>5</td><td>10081</td><td>No</td><td>Both</td><td>0.8</td><td>1444</td><td>14.32%</td><td>y2</td><td>0</td><td>[32]</td></tr>
+<tr><td>supercondutivity</td><td class="desc-cell">Two files contain data on 21263 superconductors and their relevant features.</td><td>81</td><td>0</td><td>81</td><td>21263</td><td>No</td><td>Both</td><td>0.8</td><td>0</td><td>0.00%</td><td>critical_temp</td><td>0</td><td>[33]</td></tr>
+<tr><td>treasury</td><td class="desc-cell">This file contains the Economic data information of USA from 01/04/1980 to 02/04/2000 on a weekly basis.</td><td>15</td><td>0</td><td>15</td><td>1049</td><td>No</td><td>Low</td><td>0.8</td><td>137</td><td>13.06%</td><td>1MonthCDRate</td><td>0</td><td>[4]</td></tr>
+<tr><td>triazines</td><td class="desc-cell">A triazine dataset. The goal is to predict the inhibition of dihydrofolate reductase by triazines.</td><td>60</td><td>0</td><td>60</td><td>186</td><td>No</td><td>Both</td><td>0.8</td><td>23</td><td>12.37%</td><td>activity</td><td>0</td><td>[34]</td></tr>
+<tr><td>wankara</td><td class="desc-cell">This file contains the weather information of Ankara from 01/01/1994 to 28/05/1998.</td><td>9</td><td>0</td><td>9</td><td>1609</td><td>No</td><td>Both</td><td>0.8</td><td>0</td><td>0.00%</td><td>Mean_temperature</td><td>0</td><td>[4]</td></tr>
+<tr><td>wine-quality</td><td class="desc-cell">The two datasets are combined and related to red and white variants of the Portuguese "Vinho Verde" wine.</td><td>12</td><td>1</td><td>11</td><td>6497</td><td>No</td><td>High</td><td>0.8</td><td>4113</td><td>63.31%</td><td>quality</td><td>0</td><td>[35]</td></tr>
+<tr><td>yachtHydrodynamics</td><td class="desc-cell">Delft data set, used to predict the hydodynamic performance of sailing yachts from dimensions and velocity.</td><td>6</td><td>0</td><td>6</td><td>308</td><td>No</td><td>Both</td><td>0.8</td><td>0</td><td>0.00%</td><td>Residuary_Resistance</td><td>0</td><td>[36]</td></tr>
+</tbody>
 </table>
-            </table>
-        </div>
-    </div>
-
-    <!-- JS dependencies for DataTables -->
-    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
-    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
-    <script>
+</div>
+<h3 class="mt-5" style="color:#74698C;"><i class="fas fa-book"></i> References</h3><ul><li>[1] Torgo, L. (2016). Data mining with R: Learning with case studies (2nd ed.). Chapman &amp; Hall/CRC. http://ltorgo.github.io/DMwR2</li><li>[2] Nash, W., Sellers, T., Talbot, S., Cawthorn, A., &amp; Ford, W. (1994). Abalone. UCI Machine Learning Repository. https://doi.org/10.24432/C55C7W</li><li>[3] Moniz, N., Ribeiro, R. P., &amp; Margarido, M. (2023). accel: Acceleration dataset [Dataset in the IRon R package, version 0.1.4]. https://CRAN.R-project.org/package=IRon</li><li>[4] Alcalá-Fdez, J., Fernández, A., Luengo, J., Derrac, J., García, S., Sánchez, L., &amp; Herrera, F. (2011). KEEL data-mining software tool: Data set repository, integration of algorithms and experimental analysis framework. Journal of Multiple-Valued Logic and Soft Computing, 17(2–3), 255–287.</li><li>[5] Brooks, T., Pope, D., &amp; Marcolini, M. (1989). Airfoil self-noise [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C5VW2C</li><li>[6] Candanedo, L. (2017). Appliances energy prediction [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C5VC8G</li><li>[7] Schlimmer, J. (1985). Automobile [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C5B01C</li><li>[8] Camacho, L., &amp; Bação, F. (2024). WSMOTER: A novel approach for imbalanced regression. Applied Intelligence, 54, 1–11. https://doi.org/10.1007/s10489-024-05608-6</li><li>[9] Rasmussen, C. E., Neal, R. M., Hinton, G. E., et al. (1996). DELVE: Data for evaluating learning in valid experiments[Software and dataset repository]. University of Toronto. https://www.cs.toronto.edu/~delve/</li><li>[10] Journal of Statistics Education. (1992). Pay for play: Are baseball salaries based on performance? [Dataset]. Dataset available from the Journal of Statistics Education. https://jse.amstat.org/datasets/baseball.dat.txt</li><li>[11] Carnegie Mellon University. (2016). StatLib: A data and software archive [Online dataset repository]. https://lib.stat.cmu.edu</li><li>[12] OpenML contributors. (2025). OpenML dataset 1051 [Dataset]. OpenML: An open platform for machine learning. https://www.openml.org/d/1051</li><li>[13] Yeh, I.-C. (1998). Concrete compressive strength [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C5PK67</li><li>[14] Fortuna, L., Graziani, S., Rizzo, A., &amp; Xibilia, M. G. (2007). Soft sensors for monitoring and control of industrial processes. In Advances in Industrial Control. Springer London. https://doi.org/10.1007/978-1-84628-480-9</li><li>[15] Torgo, L. (2019). Regression data sets [Online dataset repository]. LIACC / University of Porto. https://www.dcc.fc.up.pt/~ltorgo/Regression/DataSets.html</li><li>[16] Cortez, P., &amp; Morais, A. (2007). Forest fires [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C5D88D</li><li>[17] University of Toronto, DELVE Project. (2003). DELVE: Data for evaluating learning in valid experiments [Online dataset repository]. https://www.cs.toronto.edu/~delve/</li><li>[18] Zhou, F., Claire, Q., &amp; King, R. D. (2014). Geographical origin of music [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C5VK5D</li><li>[19] Necrothapa, S. (2020). Ames housing dataset [Dataset]. Kaggle. https://www.kaggle.com/datasets/shashanknecrothapa/ames-housing-dataset</li><li>[20] Schirmer, C. (2020). Boston housing [Dataset]. Kaggle. https://www.kaggle.com/datasets/schirmerchad/bostonhoustingmlnd</li><li>[21] Elkan, C. (2001). Magical thinking in data mining: Lessons from CoIL Challenge 2000. In Proceedings of the seventh ACM SIGKDD international conference on Knowledge discovery and data mining (pp. 426–431). ACM. https://doi.org/10.1145/502512.502576</li><li>[22] Director's Challenge Consortium for the Molecular Classification of Lung Adenocarcinoma, Shedden, K., Taylor, J. M., Enkemann, S. A., Tsao, M. S., Yeatman, T. J., Gerald, W. L., Eschrich, S., Jurisica, I., Giordano, T. J., Misek, D. E., Chang, A. C., Zhu, C. Q., Strumpf, D., Hanash, S., &amp; Shepherd, F. A. (2008). Shedden_2008: Gene expression–based survival prediction in lung adenocarcinoma [Dataset]. Lung Cancer Explorer, UT Southwestern. https://lce.biohpc.swmed.edu/lungcancer/datasetsearch.php?datasetid=1</li><li>[23] Branco, P., Torgo, L., &amp; Ribeiro, R. P. (2025). Imbalanced regression data sets [Online dataset repository]. University of Porto. https://paobranco.github.io/Imbalanced-Regression-DataSets/</li><li>[24] Meta-data. (1994). Meta-data [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C5X31P</li><li>[25] Board of Governors of the Federal Reserve System. (2025). H.15 selected interest rates [Statistical release and dataset repository]. https://www.federalreserve.gov/releases/h15/</li><li>[26] OpenML contributors. (2025). OpenML dataset 409 [Dataset]. OpenML platform. https://www.openml.org/d/409</li><li>[27] Coleman, D. (1986). pollen: Geometric features of pollen grains [Dataset]. StatLib Archive, Carnegie Mellon University. https://lib.stat.cmu.edu/data-expo/pollen.data</li><li>[28] Brien, C. J., &amp; Payne, R. W. (1999). Tiers, structure formulae and the analysis of complicated experiments. Journal of the Royal Statistical Society: Series D (The Statistician), 48(1), 41–52.</li><li>[29] OpenML contributors. (n.d.). space_ga [Dataset]. OpenML. https://www.openml.org/d/507</li><li>[30] Carnegie Mellon University, Department of Statistics. (2016). StatLib: A data and software archive [Online dataset repository]. https://lib.stat.cmu.edu/datasets/</li><li>[31] Tibshirani, R. J. (2015). strike: Annual strikes data for OECD countries (1951–1985) [Dataset]. Dataset used in course “Statistical Computing,” Carnegie Mellon University. http://www.stat.cmu.edu/~ryantibs/statcomp-F15/homework/strike.txt</li><li>[32] OpenML contributors. (2025). sulfur [Dataset]. OpenML. https://www.openml.org/d/23515</li><li>[33] Hamidieh, K. (2018). Superconductivity data [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C53P47</li><li>[34] King, R. D., Hurst, J. D., &amp; Sternberg, M. J. E. (1994). A comparison of artificial intelligence methods for modelling QSARs. Applied Artificial Intelligence, 9, 213–234. / Hirst, J. D., King, R. D., &amp; Sternberg, M. J. E. (1994). Quantitative structure–activity relationships by neural networks and inductive logic programming: II. The inhibition of dihydrofolate reductase by triazines. Journal of Computer-Aided Molecular Design, 8(4), 421–432. https://doi.org/10.1007/BF00125376</li><li>[35] Cortez, P., Cerdeira, A., Almeida, F., Matos, T., &amp; Reis, J. (2009). Wine Quality [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C56S3T.</li><li>[36] Gerritsma, J., Onnink, R., &amp; Versluis, A. (1981). Yacht Hydrodynamics [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C5XG7R.</li></ul></div>
+<!-- JS dependencies -->
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/fixedheader/3.4.0/js/dataTables.fixedHeader.min.js"></script>
+<script>
         $(document).ready(function () {
-            $('#datasetTable').DataTable({
-                responsive: true
+            var table = $('#datasetTable').DataTable({
+                responsive: true,
+                fixedHeader: true
+            });
+
+            $('#datasetTable').on('click', '.desc-cell', function () {
+                $(this).toggleClass('expanded');
             });
         });
     </script>
