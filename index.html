@@ -2,15 +2,46 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Dataset Repository</title>
+    <title>Imbalanced Regression Dataset Repository</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css"/>
+    <style>
+        body {
+            background-color: #fdf5d7; /* pastel mustard */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .container {
+            max-width: 95%;
+        }
+        h1, h5 {
+            text-align: center;
+        }
+        table {
+            font-size: 0.9rem;
+        }
+        thead th {
+            position: sticky;
+            top: 0;
+            background-color: #343a40;
+            color: white;
+            z-index: 2;
+            text-align: center !important;
+        }
+        td {
+            text-align: center !important;
+            vertical-align: middle !important;
+        }
+    </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <h1 class="mb-4">Dataset Repository</h1>
-        <p>This page lists a collection of datasets along with metadata like features, missing values, and target variables.</p>
-        <table class="dataframe table table-bordered table-hover">
+    <div class="container my-5">
+        <h1 class="mb-4">Imbalanced Regression Dataset Repository</h1>
+        <h5 class="text-muted mb-4">A curated collection of datasets for extreme value-aware regression tasks</h5>
+        <p>This page provides access to datasets with metadata on features, target imbalance, extreme values, and missing data characteristics. Ideal for benchmarking regression models under imbalanced conditions.</p>
+        <div class="table-responsive">
+            <table id="datasetTable" class="table table-striped table-hover table-bordered align-middle" style="width:100%">
+                <table class="dataframe dataframe">
   <thead>
     <tr style="text-align: right;">
       <th>Dataset</th>
@@ -962,6 +993,20 @@ Rare</th>
     </tr>
   </tbody>
 </table>
+            </table>
+        </div>
     </div>
+
+    <!-- JS dependencies for DataTables -->
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#datasetTable').DataTable({
+                responsive: true
+            });
+        });
+    </script>
 </body>
 </html>
