@@ -78,9 +78,6 @@ For the complete, user-friendly experience, visit: [Datasets-ImbalancedRegressio
 
 ## References
 
-
-## References
-
 [1] Torgo, L. (2016). Data mining with R: Learning with case studies (2nd ed.). Chapman & Hall/CRC. http://ltorgo.github.io/DMwR2
 
 [2] Nash, W., Sellers, T., Talbot, S., Cawthorn, A., & Ford, W. (1994). Abalone. UCI Machine Learning Repository. https://doi.org/10.24432/C55C7W
